@@ -110,36 +110,36 @@ def readHistoryPaiLie3File(filePath):
     curTime = time.localtime(time.time())
     curYear = curTime[0]
 
-    for year in range(lastYear, curYear+1):
-        begTime = 0
-        endTime = 366
-        if year==lastYear:
-            begTime = lastTime+1
-        if year==curYear:
-            endTime = curTime[1] * 31 + curTime[2]
-        #print begTime, endTime
-        for day in range(begTime, endTime):
-            lotteryTime = str(year*1000 + day)
-            print lotteryTime
-            lottery = getLotteryPaiLie3(lotteryTime)
-            if lottery!=None:
-                allLottery.append(lottery)
-
-                numDanXuan, moneyDanXuan = lottery.getDanXuan()
-                numZuXuan3, moneyZuXuan3 = lottery.getZuXuan3()
-                numZuXuan6, moneyZuXuan6 = lottery.getZuXuan6()
-                fileLotteryText = ''
-                fileLotteryText = fileLotteryText + lottery.getTime() + ' ' +\
-                                  lottery.getNum() + ' ' + \
-                                  str(lottery.getMoneyIn()) + ' ' +  \
-                                  str(numDanXuan) + ' ' +  \
-                                  str(moneyDanXuan) + ' ' +  \
-                                  str(numZuXuan3) + ' ' +  \
-                                  str(moneyZuXuan3) + ' ' +  \
-                                  str(numZuXuan6) + ' ' +  \
-                                  str(moneyZuXuan6) + '\n'
-                f.write(fileLotteryText)
-                #print fileLotteryText
+##    for year in range(lastYear, curYear+1):
+##        begTime = 0
+##        endTime = 366
+##        if year==lastYear:
+##            begTime = lastTime+1
+##        if year==curYear:
+##            endTime = curTime[1] * 31 + curTime[2]
+##        #print begTime, endTime
+##        for day in range(begTime, endTime):
+##            lotteryTime = str(year*1000 + day)
+##            print lotteryTime
+##            lottery = getLotteryPaiLie3(lotteryTime)
+##            if lottery!=None:
+##                allLottery.append(lottery)
+##
+##                numDanXuan, moneyDanXuan = lottery.getDanXuan()
+##                numZuXuan3, moneyZuXuan3 = lottery.getZuXuan3()
+##                numZuXuan6, moneyZuXuan6 = lottery.getZuXuan6()
+##                fileLotteryText = ''
+##                fileLotteryText = fileLotteryText + lottery.getTime() + ' ' +\
+##                                  lottery.getNum() + ' ' + \
+##                                  str(lottery.getMoneyIn()) + ' ' +  \
+##                                  str(numDanXuan) + ' ' +  \
+##                                  str(moneyDanXuan) + ' ' +  \
+##                                  str(numZuXuan3) + ' ' +  \
+##                                  str(moneyZuXuan3) + ' ' +  \
+##                                  str(numZuXuan6) + ' ' +  \
+##                                  str(moneyZuXuan6) + '\n'
+##                f.write(fileLotteryText)
+##                #print fileLotteryText
                                   
     f.close()
     return allLottery
@@ -149,4 +149,32 @@ def getPaiLie3NumValueSet():
     valSet = []
     for lottery in allLottery:
         valSet.append(lottery.getNumValue())
+    return valSet
+
+def getPaiLie3NumSumValueSet():
+    allLottery = readHistoryPaiLie3File('排列3.txt')
+    valSet = []
+    for lottery in allLottery:
+        valSet.append(lottery.getNumElementSum())
+    return valSet
+
+def getPaiLie3NumGeWeiValueSet():
+    allLottery = readHistoryPaiLie3File('排列3.txt')
+    valSet = []
+    for lottery in allLottery:
+        valSet.append(lottery.getNumElementValue(0))
+    return valSet
+
+def getPaiLie3NumShiWeiValueSet():
+    allLottery = readHistoryPaiLie3File('排列3.txt')
+    valSet = []
+    for lottery in allLottery:
+        valSet.append(lottery.getNumElementValue(1))
+    return valSet
+
+def getPaiLie3NumBaiWeiValueSet():
+    allLottery = readHistoryPaiLie3File('排列3.txt')
+    valSet = []
+    for lottery in allLottery:
+        valSet.append(lottery.getNumElementValue(2))
     return valSet

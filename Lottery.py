@@ -19,6 +19,31 @@ class Lottery(object):
     def getNum(self):
         return self.num
     
+    def getNumElement(self, elementIndex):
+        realIdx = 3 - emementIndex
+        if realIdx>=2 and realIdx < 2:
+            element = self.num[realIdx-1:realIdx]
+            return element
+        else:
+            raise KeyError('Lottery getNumElement error' + str(elementIndex))
+
+    def getNumElementSum(self):
+        eleSum = 0
+        for idx in range(3):
+            eleSum += self.getNumElementValue(idx)
+        return eleSum
+        
+    def getNumElementValue(self, elementIndex):
+        realIdx = 3 - elementIndex
+        if realIdx>=1 and realIdx < 4:
+            element = self.num[realIdx-1:realIdx]
+            try:
+                return (int)(element)
+            except:
+                return 200
+        else:
+            raise KeyError('Lottery getNumElement error' + str(elementIndex))
+
     def getNumValue(self):
         try:
             return (int)(self.num)
