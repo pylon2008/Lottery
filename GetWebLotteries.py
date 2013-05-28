@@ -144,37 +144,62 @@ def readHistoryPaiLie3File(filePath):
     f.close()
     return allLottery
 
-def getPaiLie3NumValueSet():
+def getPaiLie3NumValueSet(begTime, endTime):
+    """
+    获取时期[begTime, endTime]内的数据
+    """
     allLottery = readHistoryPaiLie3File('排列3.txt')
     valSet = []
     for lottery in allLottery:
-        valSet.append(lottery.getNumValue())
+        time = lottery.getTime()
+        if time>= begTime and time<=endTime:
+            valSet.append(lottery.getNumValue())
     return valSet
 
-def getPaiLie3NumSumValueSet():
+def getPaiLie3NumSumValueSet(begTime, endTime):
+    """
+    获取时期[begTime, endTime]内的数据
+    """
     allLottery = readHistoryPaiLie3File('排列3.txt')
     valSet = []
     for lottery in allLottery:
-        valSet.append(lottery.getNumElementSum())
+        time = lottery.getTime()
+        if time>= begTime and time<=endTime:
+            valSet.append(lottery.getNumElementSum())
     return valSet
 
-def getPaiLie3NumGeWeiValueSet():
+def getPaiLie3NumGeWeiValueSet(begTime, endTime):
+    """
+    获取时期[begTime, endTime]内的数据
+    """
     allLottery = readHistoryPaiLie3File('排列3.txt')
     valSet = []
     for lottery in allLottery:
-        valSet.append(lottery.getNumElementValue(0))
+        time = lottery.getTime()
+        if time>= begTime and time<=endTime:
+            valSet.append(lottery.getNumElementValue(0))
     return valSet
 
-def getPaiLie3NumShiWeiValueSet():
+def getPaiLie3NumShiWeiValueSet(begTime, endTime):
+    """
+    获取时期[begTime, endTime]内的数据
+    """
     allLottery = readHistoryPaiLie3File('排列3.txt')
     valSet = []
     for lottery in allLottery:
-        valSet.append(lottery.getNumElementValue(1))
+        time = lottery.getTime()
+        if time>= begTime and time<=endTime:
+            valSet.append(lottery.getNumElementValue(1))
     return valSet
 
-def getPaiLie3NumBaiWeiValueSet():
+def getPaiLie3NumBaiWeiValueSet(begTime, endTime):
+    """
+    获取时期[begTime, endTime]内的数据
+    """
     allLottery = readHistoryPaiLie3File('排列3.txt')
     valSet = []
     for lottery in allLottery:
-        valSet.append(lottery.getNumElementValue(2))
+        time = lottery.getTime()
+        if time>= begTime and time<=endTime:
+            valSet.append(lottery.getNumElementValue(2))
     return valSet

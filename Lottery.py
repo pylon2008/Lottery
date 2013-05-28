@@ -56,6 +56,9 @@ class Lottery(object):
     def getMoneyOut(self):
         return self.moneyOut
 
+    def __eq__(self, other):
+        return self.num == other.num
+    
     def __str__(self):
         strLottery = ''
         strIn = str(self.moneyIn)
