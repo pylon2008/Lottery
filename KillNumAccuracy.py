@@ -2,6 +2,43 @@
 from GetWebLotteries import *
 import pylab
 
+def getMoneyInOut(begTime, endTime):
+    """
+    计算某时间段内的奖额、投注总额比
+    http://blog.sina.com.cn/s/blog_74a7e56e010177l8.html
+    http://wenku.baidu.com/view/583a5604eff9aef8941e060a.html
+    http://www.douban.com/group/topic/16780820/
+    """
+    allLottery = readHistoryPaiLie3File('排列3.txt')
+    numAll = 0
+    val = 0.0
+    for lottery in allLottery:
+        time = lottery.getTime()
+        if time>= begTime and time<=endTime:
+            numAll += 1
+            thisVal = ( (float)(lottery.getMoneyOut()) / lottery.getMoneyIn() )
+            val += thisVal
+            #print lottery.getMoneyOut(), lottery.getMoneyIn(), thisVal
+    accuracy = val * 100.0 / float(numAll)
+    return accuracy
+
+def testMoneyInOut():
+    print 'getMoneyInOut():'
+    allYear = [('2004001', '2004365'),\
+               ('2005001', '2005365'),\
+               ('2006001', '2006365'),\
+               ('2007001', '2007365'),\
+               ('2008001', '2008365'),\
+               ('2009001', '2009365'),\
+               ('2010001', '2010365'),\
+               ('2011001', '2011365'),\
+               ('2012001', '2012365'),\
+               ('2013001', '2013365'),\
+               ('2004001', '2013365')
+               ]
+    for year in allYear:
+        print year[0], '->', year[1], ':', getMoneyInOut(year[0], year[1])
+
 def getKNATimeEnding(begTime, endTime):
     """
     1.杀当期期号尾。如测07098期杀8，07098期开奖号679，正确。
@@ -83,11 +120,23 @@ def testGetKNALast2ElementCutSumEnding():
     for year in allYear:
         print year[0], '->', year[1], ':', getKNALast2ElementCutSumEnding(year[0], year[1])
 
-def getKNALast2ElementAddSumEnding(begTime, endTime):
+def getKNALast2ElementAddSumEnding(begTime, endTime, numTime):
     """
     5.杀上两期百十个位分别相加之尾。如07096期开奖号967，07097期开奖号532，
     9+5=14，6+3=9，7+2=9，杀4和9，07098期开奖号679，4对，9错
-    """ 
+    """
+    """
+    支持杀多期numTime
+    """
+    def getMulAdd(curTime, numTime, allLottery):
+        val = 0
+        for idx in range(numTime):
+            realIdx = curTime - idx - 1
+            if realIdx<0:
+                break
+            val += allLottery[realIdx].getNumElementSum()
+        return val
+            
     allLottery = readHistoryPaiLie3File('排列3.txt')
     numAll = 0
     numRight = 0
@@ -96,12 +145,13 @@ def getKNALast2ElementAddSumEnding(begTime, endTime):
         time = lottery.getTime()
         if time>= begTime and time<=endTime:
             numAll += 1
-            last2 = allLottery[idx-2]
-            last1 = allLottery[idx-1]
-            elementCutSum = \
-                          (last2.getNumElementValue(0)+last1.getNumElementValue(0))+\
-                          (last2.getNumElementValue(1)+last1.getNumElementValue(1))+\
-                          (last2.getNumElementValue(2)+last1.getNumElementValue(2))
+            elementCutSum = getMulAdd(idx, numTime, allLottery)
+##            last2 = allLottery[idx-2]
+##            last1 = allLottery[idx-1]
+##            elementCutSum = \
+##                          (last2.getNumElementValue(0)+last1.getNumElementValue(0))+\
+##                          (last2.getNumElementValue(1)+last1.getNumElementValue(1))+\
+##                          (last2.getNumElementValue(2)+last1.getNumElementValue(2))
             strelementCutSum = str(elementCutSum)
             if strelementCutSum[-1] in lottery.getNum():
                 numRight += 0
@@ -115,19 +165,26 @@ def getKNALast2ElementAddSumEnding(begTime, endTime):
 
 def testGetKNALast2ElementAddSumEnding():
     print 'getKNALast2ElementAddSumEnding():'
-    allYear = [('2004001', '2004365'),\
-               ('2005001', '2005365'),\
-               ('2006001', '2006365'),\
-               ('2007001', '2007365'),\
-               ('2008001', '2008365'),\
-               ('2009001', '2009365'),\
-               ('2010001', '2010365'),\
-               ('2011001', '2011365'),\
-               ('2012001', '2012365'),\
-               ('2013001', '2013365')
-               ]
-    for year in allYear:
-        print year[0], '->', year[1], ':', getKNALast2ElementAddSumEnding(year[0], year[1])
+##    allYear = [('2004001', '2004365'),\
+##               ('2005001', '2005365'),\
+##               ('2006001', '2006365'),\
+##               ('2007001', '2007365'),\
+##               ('2008001', '2008365'),\
+##               ('2009001', '2009365'),\
+##               ('2010001', '2010365'),\
+##               ('2011001', '2011365'),\
+##               ('2012001', '2012365'),\
+##               ('2013001', '2013365')
+##               ]
+##    for year in allYear:
+##        print year[0], '->', year[1], ':', getKNALast2ElementAddSumEnding(year[0], year[1], 4)
+    allYear = [\
+           ('2004001', '2013365')\
+           ]
+    year = allYear[0]
+    for idx in range(1,1000):
+        print year[0], '->', year[1], ':', getKNALast2ElementAddSumEnding(year[0], year[1], idx)
+
 
 def getKNASumEnding(begTime, endTime):
     """
@@ -396,6 +453,7 @@ def testGetKNADoubleElementCorresponding():
         print year[0], '->', year[1], ':', getKNADoubleElementCorresponding(year[0], year[1])
 
 if __name__ =="__main__":
+    testMoneyInOut()
 ##    testGetKNATimeEnding()
 ##    testGetKNALast2ElementCutSumEnding()
 ##    testGetKNALast2ElementAddSumEnding()
@@ -404,4 +462,4 @@ if __name__ =="__main__":
 ##    testGetKNAWeightedAverage2()
 ##    testGetKNACorresponding()
 ##    testGetKNASumSum()
-    testGetKNADoubleElementCorresponding()
+##    testGetKNADoubleElementCorresponding()
